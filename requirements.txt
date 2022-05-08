@@ -1,0 +1,14 @@
+aws-cdk.aws-s3==1.155.0
+aws-cdk.aws-s3-deployment==1.155.0
+aws-cdk.aws-dynamodb==1.155.0
+aws-cdk.aws-lambda==1.155.0
+aws-cdk.aws-apigateway==1.155.0
+aws_cdk.aws_events==1.155.0
+aws_cdk.aws_iam==1.155.0
+aws_cdk.aws_events_targets==1.155.0
+aws_cdk.aws_cloudwatch==1.155.0
+aws_cdk.aws_sns==1.155.0
+aws_cdk.aws_cloudwatch_actions==1.155.0
+boto3
+python-dotenv
+requests

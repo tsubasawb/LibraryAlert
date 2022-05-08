@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Alert</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    />
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="container-lg">
+        <div class="row">
+            <div class="col">
+                <input v-model="isbn"/><br />
+                <button v-on:click="addNewBook">本の追加</button>
+                <button v-on:click="deleteBook">本の削除</button>
+            </div>
+            <div class="col">
+                <input v-model="systemid"/><br />
+                <button v-on:click="addNewLibrary">図書館の追加</button>
+                <button v-on:click="deleteLibrary">図書館の削除</button>
+            </div>
+        </div>
+        <table class="table">
+          <thead class="table-dark">
+            <tr>
+              <th>Book</th>
+              <th>Library</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="s in status">
+              <td><a v-bind:href="`https://calil.jp/book/${s.ISBN}`">{{ s.ISBN }}</a></td>
+              <td>{{ s.Library }}</td>
+              <td v-if="s.Status">入荷済</td>
+              <td v-else>未入荷</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="endpoint.js"></script>
+    <script>
+      axios.defaults.baseURL = endpoint
+      Vue.createApp({
+        el: "#app",
+        data() {
+          return {
+            status: [],
+            isbn: "",
+            systemid: "",
+          };
+        },
+        methods: {
+          addNewBook: function () {
+            axios
+              .post("/books", {
+                isbn: this.isbn,
+              })
+              .then((response) => console.log(response))
+              .catch((error) => console.log(error));
+          },
+          deleteBook: function () {
+            axios
+              .delete("/books/" + this.isbn)
+              .then((response) => console.log(response))
+              .catch((error) => console.log(error));
+          },
+          addNewLibrary: function () {
+            axios
+              .post("/libraries", {
+                systemid: this.systemid,
+              })
+              .then((response) => console.log(response))
+              .catch((error) => console.log(error));
+          },
+          deleteLibrary: function () {
+            axios
+              .delete("/libraries/" + this.systemid)
+              .then((response) => console.log(response))
+              .catch((error) => console.log(error));
+          },
+        },
+        mounted() {
+          axios
+            .get()
+            .then((response) => (this.status = response.data))
+            .catch((error) => console.log(error));
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

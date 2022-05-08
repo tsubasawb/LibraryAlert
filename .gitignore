@@ -1,0 +1,7 @@
+.vscode
+.env
+.DS_Store
+venv
+cdk.out
+gui/endpoint.js
+api/packages
