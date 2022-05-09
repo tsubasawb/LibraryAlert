@@ -118,21 +118,40 @@ class LibraryAlert(core.Stack):
             ),
         )
 
-        api.root.add_method("GET", apigw.LambdaIntegration(get_all_status_lambda))
+        api.root.add_method(
+            "GET", apigw.LambdaIntegration(get_all_status_lambda), api_key_required=True
+        )
 
         libraries = api.root.add_resource("libraries")
-        libraries.add_method("POST", apigw.LambdaIntegration(post_library_lambda))
+        libraries.add_method(
+            "POST", apigw.LambdaIntegration(post_library_lambda), api_key_required=True
+        )
 
         libraries_systemid = libraries.add_resource("{systemid}")
         libraries_systemid.add_method(
-            "DELETE", apigw.LambdaIntegration(delete_library_lambda)
+            "DELETE",
+            apigw.LambdaIntegration(delete_library_lambda),
+            api_key_required=True,
         )
 
         books = api.root.add_resource("books")
-        books.add_method("POST", apigw.LambdaIntegration(post_book_lambda))
+        books.add_method(
+            "POST", apigw.LambdaIntegration(post_book_lambda), api_key_required=True
+        )
 
         books_isbn = books.add_resource("{isbn}")
-        books_isbn.add_method("DELETE", apigw.LambdaIntegration(delete_book_lambda))
+        books_isbn.add_method(
+            "DELETE", apigw.LambdaIntegration(delete_book_lambda), api_key_required=True
+        )
+
+        # API key
+        plan = api.add_usage_plan(
+            "Plan", throttle=apigw.ThrottleSettings(rate_limit=1, burst_limit=2)
+        )
+
+        key = api.add_api_key("Key")
+        plan.add_api_key(key)
+        plan.add_api_stage(api=api, stage=api.deployment_stage)
 
         # Event Bridge
         events.Rule(

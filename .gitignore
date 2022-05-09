@@ -3,5 +3,5 @@
 .DS_Store
 venv
 cdk.out
-gui/endpoint.js
+gui/config.js
 api/packages

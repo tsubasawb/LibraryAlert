@@ -4,8 +4,6 @@ import json
 import os
 import sys
 
-sys.path.append(os.pardir)
-
 from db_manager import DbManager
 
 dynamodb = boto3.resource("dynamodb")

@@ -46,9 +46,10 @@
     </div>
     <script src="https://unpkg.com/vue@3"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="endpoint.js"></script>
+    <script src="config.js"></script>
     <script>
-      axios.defaults.baseURL = endpoint
+      axios.defaults.baseURL = config.endpoint;
+      axios.defaults.headers.common["x-api-key"] = config.apikey;
       Vue.createApp({
         el: "#app",
         data() {
@@ -62,7 +63,7 @@
           addNewBook: function () {
             axios
               .post("/books", {
-                isbn: this.isbn,
+                isbn: this.isbn
               })
               .then((response) => console.log(response))
               .catch((error) => console.log(error));
