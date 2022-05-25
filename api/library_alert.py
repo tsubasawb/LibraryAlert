@@ -8,8 +8,6 @@ from collections import defaultdict
 from typing import Dict, List, Tuple, Any
 from email.mime.text import MIMEText
 from email.utils import formatdate
-
-sys.path.append("./packages")
 import requests
 
 from db_manager import DbManager

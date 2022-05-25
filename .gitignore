@@ -4,4 +4,4 @@
 venv
 cdk.out
 gui/config.js
-api/packages
+packages

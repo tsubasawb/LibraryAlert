@@ -18,6 +18,7 @@ import subprocess
 from dotenv import load_dotenv
 
 API_PATH = "api"
+LAYER_PATH = "packages"
 
 
 class LibraryAlert(core.Stack):
@@ -57,6 +58,13 @@ class LibraryAlert(core.Stack):
             "environment": {"TABLE_NAME": table.table_name},
         }
 
+        layer = _lambda.LayerVersion(
+            self,
+            "Packages",
+            code=_lambda.Code.from_asset(LAYER_PATH),
+            description="requests module",
+        )
+
         library_alert_lambda = _lambda.Function(
             self,
             "LibraryAlert",
@@ -65,6 +73,7 @@ class LibraryAlert(core.Stack):
             memory_size=512,
             timeout=core.Duration.seconds(120),
             role=lambda_role,
+            layers=[layer],
             **common_params,
         )
         get_all_status_lambda = _lambda.Function(
@@ -209,7 +218,9 @@ class LibraryAlert(core.Stack):
 
 
 # install package which needs to be uploaded to lambda
-subprocess.run(["python3", "-m", "pip", "install", "requests", "-t", "./api/packages"])
+subprocess.run(
+    ["python3", "-m", "pip", "install", "requests", "-t", "./packages/python"]
+)
 
 # get environment variable
 load_dotenv(".env")
